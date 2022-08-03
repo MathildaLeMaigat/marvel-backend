@@ -1,19 +1,25 @@
 const express = require("express");
 const cors = require("cors");
-// require("dotenv").config();
-const mongoose = require("mongoose");
+require("dotenv").config();
+// const mongoose = require("mongoose");
+
+// mongoose.connect("mongodb://localhost/marvel");
+
+const router = express.Router();
 
 const app = express();
 app.use(cors());
 app.use(express());
 
-// mongoose.connect(process.env.DATABASE_URL);
-mongoose.connect("mongodb://localhost:27017/marvel-backend");
-
 app.get("/", (req, res) => {
   console.log("OK");
   res.status(200).json({ message: "route /" });
 });
+
+const comicsRoute = require("./Routes/comics");
+// app.use(comicsRoute);
+const charactersRoute = require("./Routes/characters");
+// app.use(charactersRoute);
 
 app.all("*", (req, res) => {
   console.log("route not found");

@@ -3,7 +3,6 @@ const cors = require("cors");
 require("dotenv").config();
 const axios = require("axios");
 // const mongoose = require("mongoose");
-
 // mongoose.connect("mongodb://localhost/marvel");
 
 const app = express();
@@ -17,9 +16,9 @@ app.get("/", (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
-    console.log("route ok");
+    console.log("route character ok");
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}`
+      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=sJtB4rOXTaqEL0PO`
     );
     console.log("route characters");
     res.json(response.data);
@@ -28,19 +27,19 @@ app.get("/characters", async (req, res) => {
   }
 });
 
-// app.get("/comics", async (req, res) => {
-//   try {
-//     console.log("2eme route ok");
-//     const response = await axios.get(
-//       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=sJtB4rOXTaqEL0PO`
-//       //   `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}`
-//     );
-//     console.log("route comics");
-//     res.json(response.data);
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// });
+app.get("/comics", async (req, res) => {
+  try {
+    console.log("route comics ok");
+    const response = await axios.get(
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=sJtB4rOXTaqEL0PO`
+      //   `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}`
+    );
+    console.log("route comics");
+    res.json(response.data);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 app.all("*", (req, res) => {
   console.log("route not found");

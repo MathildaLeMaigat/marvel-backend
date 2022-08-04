@@ -28,19 +28,19 @@ app.get("/characters", async (req, res) => {
   }
 });
 
-app.get("/comics", async (req, res) => {
-  try {
-    console.log("ok");
-    const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=sJtB4rOXTaqEL0PO`
-      //   `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}`
-    );
-    console.log("route comics");
-    res.json(response.data);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+// app.get("/comics", async (req, res) => {
+//   try {
+//     console.log("2eme route ok");
+//     const response = await axios.get(
+//       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=sJtB4rOXTaqEL0PO`
+//       //   `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}`
+//     );
+//     console.log("route comics");
+//     res.json(response.data);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
 
 app.all("*", (req, res) => {
   console.log("route not found");

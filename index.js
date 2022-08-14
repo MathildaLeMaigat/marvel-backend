@@ -19,7 +19,7 @@ app.get("/characters", async (req, res) => {
     let skip = (req.query.page - 1) * 100;
     // console.log("route character ok");
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${skip}&name=${req.query.search}`
+      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}`
     );
     console.log("route characters");
     res.json(response.data);

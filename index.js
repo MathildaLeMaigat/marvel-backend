@@ -22,7 +22,7 @@ app.get("/characters", async (req, res) => {
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${skip}&name=${req.query.search}`
     );
     // console.log("route characters");
-    res.staus(200).json(response.data);
+    res.status(200).json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

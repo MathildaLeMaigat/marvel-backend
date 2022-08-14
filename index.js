@@ -22,7 +22,7 @@ app.get("/characters", async (req, res) => {
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${skip}&name=${req.query.search}`
     );
     console.log("route characters");
-    res.status(200).json(response.data);
+    res.json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -36,7 +36,7 @@ app.get("/comics", async (req, res) => {
       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}&skip=${skip}&title=${req.query.search}`
     );
     console.log("route comics");
-    res.status(200).json(response.data);
+    res.json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -48,7 +48,7 @@ app.get("character/comics/:id", async (req, res) => {
       `https://lereacteur-marvel-api.herokuapp.com/comics/${req.params.id}?apiKey=${process.env.API_KEY}`
     );
     console.log("route 3 OK");
-    res.status(200).json(response.data);
+    res.json(response.data);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

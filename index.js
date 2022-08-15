@@ -21,7 +21,7 @@ app.get("/characters", async (req, res) => {
     // let skip = (req.query.page - 1) * 100;
     // console.log("route character ok");
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&name=${req.query.search}`
+      `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&name=${req.query.name}`
     );
     console.log("route characters");
     res.json(response.data);
@@ -37,7 +37,7 @@ app.get("/comics", async (req, res) => {
     // console.log("route comics ok");
     // let skip = (req.query.page - 1) * 100;
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&title=${req.query.search}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&title=${req.query.title}`
     );
     console.log("route comics");
     res.json(response.data);

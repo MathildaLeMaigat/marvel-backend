@@ -147,6 +147,6 @@ app.all("*", (req, res) => {
   res.status(404).json({ message: "route not found !" });
 });
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 4000, () => {
   console.log("server has started 🔥");
 });

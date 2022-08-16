@@ -2,8 +2,16 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const axios = require("axios");
-// const mongoose = require("mongoose");
-// mongoose.connect("mongodb://localhost/marvel");
+// IMPORT DB
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost/marvel");
+// IMPORT PACKAGE PW
+const uid2 = require("uid2");
+const SHA256 = require("crypto-js/sha256");
+const encBase64 = require("crypto-js/enc-base64");
+
+// MODELs
+const User = require("./Models/User");
 
 const app = express();
 app.use(express.json());
@@ -16,9 +24,6 @@ app.get("/", (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
-    // let limit = req.query.limit;
-    // let skip = limit * req.query.page;
-    // let skip = (req.query.page - 1) * 100;
     // console.log("route character ok");
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&name=${req.query.search}`
@@ -32,10 +37,7 @@ app.get("/characters", async (req, res) => {
 
 app.get("/comics", async (req, res) => {
   try {
-    // let limit = req.query.limit;
-    // let skip = limit * req.query.page;
     // console.log("route comics ok");
-    // let skip = (req.query.page - 1) * 100;
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&title=${req.query.search}`
     );
@@ -70,11 +72,81 @@ app.get("/comics/:id", async (req, res) => {
 //   }
 // });
 
+// SIGN UP
+app.post("/user/signup", async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { username, email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (username) {
+      if (user === null) {
+        //  Chaines de caracteres aleatoires
+        const token = uid2(64);
+        const salt = uid2(16);
+        // console.log(token, salt);
+        // Encryptage de mon PW concatene au Salt que j'ai generé
+        const hash = SHA256(password + salt).toString(encBase64);
+        console.log(hash);
+
+        const newUser = new User({
+          account: {
+            username: username,
+          },
+          email: email,
+          token: token,
+          salt: salt,
+          hash: hash,
+        });
+        await newUser.save();
+        res.json({
+          _id: newUser.id,
+          token: newUser.token,
+          account: newUser.account,
+        });
+      } else {
+        res.status(409).json({ error: "Email already used" });
+      }
+    } else {
+      res.status(400).json({ error: "Username is missing" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// LOG IN
+app.post("/user/login", async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { email, password } = req.body;
+    // Verifier que l'email existe dans DB
+    const user = await User.findOne({ email: email });
+    if (user) {
+      // Verifier que le PW est le meme
+      const newHash = SHA256(password + user.salt).toString(encBase64);
+      if (newHash === user.hash) {
+        res.json({
+          _id: user.id,
+          token: user.token,
+          account: user.account,
+        });
+        // res.json("OK");
+      } else {
+        res.status(401).json({ error: "Unauthorized" });
+      }
+    } else {
+      res.status(401).json({ error: "Unauthorized" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 app.all("*", (req, res) => {
   console.log("route not found");
   res.status(404).json({ message: "route not found !" });
 });
 
-app.listen(process.env.PORT || 4000, () => {
+app.listen(process.env.PORT, () => {
   console.log("server has started 🔥");
 });

@@ -4,7 +4,9 @@ require("dotenv").config();
 const axios = require("axios");
 // IMPORT DB
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/marvel");
+
+mongoose.connect(process.env.MONGODB_URI);
+
 // IMPORT PACKAGE PW
 const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");

@@ -163,6 +163,13 @@ app.post("/favorites", isAuthenticated, async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+// ALL FAV
+app.get("/profil", async (req, res) => {
+  const allFavoritesCharac = await FavoriteCharac.find({
+    owner: req.query.id,
+  });
+  res.json(allFavoritesCharac);
+});
 
 app.all("*", (req, res) => {
   console.log("route not found");

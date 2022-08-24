@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 mongoose.connect(process.env.MONGODB_URI);
 
-// IMPORT PACKAGE PW
+// IMPORT PACKAGE Password
 const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
@@ -19,10 +19,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  console.log("OK");
-  res.status(200).json({ message: "route >> /" });
-});
+// app.get("/", (req, res) => {
+//   console.log("OK");
+//   res.status(200).json({ message: "route >> /" });
+// });
 
 app.get("/characters", async (req, res) => {
   try {

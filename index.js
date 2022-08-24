@@ -12,17 +12,21 @@ const uid2 = require("uid2");
 const SHA256 = require("crypto-js/sha256");
 const encBase64 = require("crypto-js/enc-base64");
 
-// MODELs
+// IMPORT MODELs
 const User = require("./Models/User");
+const Favorites = require("./Models/User");
+
+// IMPORT MIDDLEWARE
+const isAuthenticated = require("./isAuthenticated");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// app.get("/", (req, res) => {
-//   console.log("OK");
-//   res.status(200).json({ message: "route >> /" });
-// });
+app.get("/", (req, res) => {
+  console.log("OK");
+  res.status(200).json({ message: "route >> /" });
+});
 
 app.get("/characters", async (req, res) => {
   try {
@@ -139,6 +143,22 @@ app.post("/user/login", async (req, res) => {
     } else {
       res.status(401).json({ error: "Unauthorized" });
     }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// FAV
+app.post("/favorites", isAuthenticated, async (req, res) => {
+  try {
+    const newFavorites = new Favorites({
+      id: req.body.id,
+      name: req.body.name,
+      picture: req.body.picture,
+      owner: req.user,
+    });
+    await newFavorites.save();
+    res.json(newFavorites);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

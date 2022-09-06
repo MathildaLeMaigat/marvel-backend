@@ -3,21 +3,21 @@ const cors = require("cors");
 require("dotenv").config();
 const axios = require("axios");
 // IMPORT DB
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI);
 
 // IMPORT PACKAGE Password
-// const uid2 = require("uid2");
-// const SHA256 = require("crypto-js/sha256");
-// const encBase64 = require("crypto-js/enc-base64");
+const uid2 = require("uid2");
+const SHA256 = require("crypto-js/sha256");
+const encBase64 = require("crypto-js/enc-base64");
 
 // IMPORT MODELs
-// const User = require("./Models/User");
-// const Favorites = require("./Models/User");
+const User = require("./Models/User");
+const Favorites = require("./Models/User");
 
 // IMPORT MIDDLEWARE
-// const isAuthenticated = require("./isAuthenticated");
+const isAuthenticated = require("./isAuthenticated");
 
 const app = express();
 app.use(express.json());
@@ -82,74 +82,74 @@ app.get("/comics/:id", async (req, res) => {
 // });
 
 // SIGN UP
-// app.post("/user/signup", async (req, res) => {
-//   try {
-//     // console.log(req.body);
-//     const { username, email, password } = req.body;
-//     const user = await User.findOne({ email: email });
-//     if (username) {
-//       if (user === null) {
-//         //  Chaines de caracteres aleatoires
-//         const token = uid2(64);
-//         const salt = uid2(16);
-//         // console.log(token, salt);
-//         // Encryptage de mon PW concatene au Salt que j'ai generé
-//         const hash = SHA256(password + salt).toString(encBase64);
-//         console.log(hash);
+app.post("/user/signup", async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { username, email, password } = req.body;
+    const user = await User.findOne({ email: email });
+    if (username) {
+      if (user === null) {
+        //  Chaines de caracteres aleatoires
+        const token = uid2(64);
+        const salt = uid2(16);
+        // console.log(token, salt);
+        // Encryptage de mon PW concatene au Salt que j'ai generé
+        const hash = SHA256(password + salt).toString(encBase64);
+        console.log(hash);
 
-//         const newUser = new User({
-//           account: {
-//             username: username,
-//           },
-//           email: email,
-//           token: token,
-//           salt: salt,
-//           hash: hash,
-//         });
-//         await newUser.save();
-//         res.json({
-//           _id: newUser.id,
-//           token: newUser.token,
-//           account: newUser.account,
-//         });
-//       } else {
-//         res.status(409).json({ error: "Email already used" });
-//       }
-//     } else {
-//       res.status(400).json({ error: "Username is missing" });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// });
+        const newUser = new User({
+          account: {
+            username: username,
+          },
+          email: email,
+          token: token,
+          salt: salt,
+          hash: hash,
+        });
+        await newUser.save();
+        res.json({
+          _id: newUser.id,
+          token: newUser.token,
+          account: newUser.account,
+        });
+      } else {
+        res.status(409).json({ error: "Email already used" });
+      }
+    } else {
+      res.status(400).json({ error: "Username is missing" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // LOG IN
-// app.post("/user/login", async (req, res) => {
-//   try {
-//     // console.log(req.body);
-//     const { email, password } = req.body;
-//     // Verifier que l'email existe dans DB
-//     const user = await User.findOne({ email: email });
-//     if (user) {
-//       // Verifier que le PW est le meme
-//       const newHash = SHA256(password + user.salt).toString(encBase64);
-//       if (newHash === user.hash) {
-//         res.json({
-//           _id: user.id,
-//           token: user.token,
-//           account: user.account,
-//         });
-//         // res.json("OK");
-//       } else {
-//         res.status(401).json({ error: "Unauthorized" });
-//       }
-//     } else {
-//       res.status(401).json({ error: "Unauthorized" });
-//     }
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// });
+app.post("/user/login", async (req, res) => {
+  try {
+    // console.log(req.body);
+    const { email, password } = req.body;
+    // Verifier que l'email existe dans DB
+    const user = await User.findOne({ email: email });
+    if (user) {
+      // Verifier que le PW est le meme
+      const newHash = SHA256(password + user.salt).toString(encBase64);
+      if (newHash === user.hash) {
+        res.json({
+          _id: user.id,
+          token: user.token,
+          account: user.account,
+        });
+        // res.json("OK");
+      } else {
+        res.status(401).json({ error: "Unauthorized" });
+      }
+    } else {
+      res.status(401).json({ error: "Unauthorized" });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // FAV
 // app.post("/favorites", isAuthenticated, async (req, res) => {

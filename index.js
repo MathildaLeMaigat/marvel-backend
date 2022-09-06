@@ -30,7 +30,6 @@ app.get("/", (req, res) => {
 
 app.get("/characters", async (req, res) => {
   try {
-    // console.log("route character ok");
     const response = await axios.get(
       `https://lereacteur-marvel-api.herokuapp.com/characters?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&name=${req.query.search}`
     );
@@ -149,27 +148,20 @@ app.post("/user/login", async (req, res) => {
 });
 
 // FAV
-app.post("/favorites", isAuthenticated, async (req, res) => {
-  try {
-    const newFavorites = new Favorites({
-      id: req.body.id,
-      name: req.body.name,
-      picture: req.body.picture,
-      owner: req.user,
-    });
-    await newFavorites.save();
-    res.json(newFavorites);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-// ALL FAV
-app.get("/profil", async (req, res) => {
-  const allFavoritesCharac = await FavoriteCharac.find({
-    owner: req.query.id,
-  });
-  res.json(allFavoritesCharac);
-});
+// app.post("/favorites", isAuthenticated, async (req, res) => {
+//   try {
+//     const newFavorites = new Favorites({
+//       id: req.body.id,
+//       name: req.body.name,
+//       picture: req.body.picture,
+//       owner: req.user,
+//     });
+//     await newFavorites.save();
+//     res.json(newFavorites);
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// });
 
 app.all("*", (req, res) => {
   console.log("route not found");

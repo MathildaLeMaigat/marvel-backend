@@ -46,7 +46,7 @@ app.get("/comics", async (req, res) => {
   try {
     // console.log("route comics ok");
     const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}&skip=${req.query.skip}&limit=${req.query.limit}&title=${req.query.search}`
+      `https://lereacteur-marvel-api.herokuapp.com/comics?apiKey=${process.env.API_KEY}`
     );
     console.log("route comics");
     res.json(response.data);
@@ -54,6 +54,8 @@ app.get("/comics", async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
+// &skip=${req.query.skip}&limit=${req.query.limit}&title=${req.query.search}
 
 app.get("/comics/:id", async (req, res) => {
   try {

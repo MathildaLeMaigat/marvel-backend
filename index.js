@@ -57,29 +57,29 @@ app.get("/comics", async (req, res) => {
 
 //
 
-app.get("/comics/:id", async (req, res) => {
-  try {
-    const response = await axios.get(
-      `https://lereacteur-marvel-api.herokuapp.com/comics/${req.params.id}?apiKey=${process.env.API_KEY}`
-    );
-    console.log("route 3 OK");
-    res.json(response.data);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-// app.get("/characters/:id", async (req, res) => {
+// app.get("/comics/:id", async (req, res) => {
 //   try {
-//     const response = axios.get(
-//       `https://lereacteur-marvel-api.herokuapp.com/character/${req.params.id}?apiKey=${process.env.API_KEY}`
+//     const response = await axios.get(
+//       `https://lereacteur-marvel-api.herokuapp.com/comics/${req.params.id}?apiKey=${process.env.API_KEY}`
 //     );
-//     console.log("route 4 OK");
+//     console.log("route 3 OK");
 //     res.json(response.data);
 //   } catch (error) {
 //     res.status(400).json({ error: error.message });
 //   }
 // });
+
+app.get("/characters/:id", async (req, res) => {
+  try {
+    const response = axios.get(
+      `https://lereacteur-marvel-api.herokuapp.com/character/${req.params.id}?apiKey=${process.env.API_KEY}`
+    );
+    console.log("route 4 OK");
+    res.json(response.data);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 // SIGN UP
 // app.post("/user/signup", async (req, res) => {
